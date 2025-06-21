@@ -1,4 +1,6 @@
 import OpenAI from "openai";
+import fs from "fs";
+import yaml from "js-yaml";
 
 const token = process.env["GITHUB_TOKEN"];
 const endpoint = "https://models.github.ai/inference";
@@ -8,9 +10,14 @@ export async function main() {
 
   const client = new OpenAI({ baseURL: endpoint, apiKey: token });
 
+  // Read and parse the prompt file
+  const promptFile = fs.readFileSync('./dora.prompt.yml', 'utf8');
+  const promptData = yaml.load(promptFile);
+  const systemMessage = promptData.messages.find(msg => msg.role === 'system');
+
   const response = await client.chat.completions.create({
     messages: [
-        { role:"system", content: "あなたはドラえもんです。ドラえもんの口調でお話します。" },
+        { role:"system", content: systemMessage.content },
         { role:"user", content: "What is the capital of France?" }
       ],
       temperature: 1.0,
