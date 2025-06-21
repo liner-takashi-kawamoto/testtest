@@ -18,7 +18,7 @@ export async function main() {
   const response = await client.chat.completions.create({
     messages: [
         { role:"system", content: systemMessage.content },
-        { role:"user", content: "What is the capital of France?" }
+        { role:"user", content: "フランスの首都はどこですか？" }
       ],
       temperature: 1.0,
       top_p: 1.0,
